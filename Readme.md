@@ -71,7 +71,9 @@ You should see the **LeetCode Sound FX** card appear in your extensions list.
 ### Step 5 — Pin it
 
 Click the puzzle piece / extensions icon 🧩 in your browser's toolbar → find **LeetCode Sound FX** → click the pin icon so it stays visible.
-<img width="687" height="517" alt="image" src="https://github.com/user-attachments/assets/ebead24d-d0e2-40a6-8140-b853ecf1d0cc" />
+
+<img width="667" height="507" alt="image" src="https://github.com/user-attachments/assets/0821518e-9e93-45e9-af74-dee6d3b6ef14" />
+
 
 ### Step 6 — Set your sounds
 
