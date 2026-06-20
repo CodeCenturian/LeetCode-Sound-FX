@@ -8,18 +8,9 @@
     :root {
       --text-main: #ffffff;
       --text-muted: #b9bcc7;
-      --shell-bg: rgba(7, 9, 14, 0.84);
-      --card-bg: rgba(12, 14, 20, 0.86);
-      --card-bg-hover: rgba(16, 19, 27, 0.92);
       --glass-border: rgba(255, 255, 255, 0.12);
-      --glass-highlight: rgba(255, 255, 255, 0.12);
       --accent: #8fd3ff;
       --accent-strong: #d7f3ff;
-      --accent-soft: rgba(143, 211, 255, 0.16);
-      --accent-soft-strong: rgba(143, 211, 255, 0.24);
-      --track: rgba(255, 255, 255, 0.10);
-
-      /* State colours */
       --saved-accent: #7fffb2;
       --saved-accent-soft: rgba(127, 255, 178, 0.15);
       --saved-border: rgba(127, 255, 178, 0.30);
@@ -28,26 +19,16 @@
       --pending-border: rgba(255, 217, 122, 0.30);
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Outfit', sans-serif;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
 
-    html, body {
-      width: 100%;
-      min-height: 100%;
-      background: transparent;
-    }
+    html, body { width: 100%; min-height: 100%; background: transparent; }
 
     body {
-      width: 324px;
-      margin: 0;
-      padding: 0;
+      width: 520px;
+      margin: 0; padding: 0;
       color: var(--text-main);
       overflow: hidden;
-      background: linear-gradient(180deg, rgba(7, 9, 14, 0.98), rgba(10, 12, 18, 0.96));
+      background: linear-gradient(180deg, rgba(7,9,14,0.98), rgba(10,12,18,0.96));
     }
 
     .shell {
@@ -58,320 +39,223 @@
       width: 100%;
       min-height: 100vh;
       padding: 14px;
-      background: linear-gradient(180deg, rgba(9, 11, 17, 0.96), rgba(10, 12, 18, 0.90));
-      border: 1px solid rgba(255, 255, 255, 0.10);
+      background: linear-gradient(180deg, rgba(9,11,17,0.96), rgba(10,12,18,0.90));
+      border: 1px solid rgba(255,255,255,0.10);
       backdrop-filter: blur(22px) saturate(120%);
       -webkit-backdrop-filter: blur(22px) saturate(120%);
     }
 
     .shell::before {
       content: "";
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       pointer-events: none;
       background:
-        radial-gradient(circle at top left, rgba(143, 211, 255, 0.08), transparent 35%),
-        radial-gradient(circle at bottom right, rgba(143, 211, 255, 0.05), transparent 30%);
-      opacity: 0.9;
+        radial-gradient(circle at top left, rgba(143,211,255,0.08), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(143,211,255,0.05), transparent 30%);
     }
 
+    /* ── Header ── */
     .header {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 4px; padding: 2px 0 4px;
+    }
+    h2 {
+      font-size: 18px; font-weight: 600; letter-spacing: 0.3px;
+      text-align: center; text-shadow: 0 2px 14px rgba(0,0,0,0.55);
+    }
+    .subtitle {
+      font-size: 10px; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.8px; text-align: center;
+    }
+
+    /* ── Two-column grid ── */
+    /* Run column is narrower (flex: 0.85), Submit is wider (flex: 1) */
+    .columns {
+      display: flex;
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .column {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      padding: 2px 0 4px;
+      gap: 8px;
     }
 
-    h2 {
-      font-size: 18px;
+    .column-run    { flex: 0.85; }
+    .column-submit { flex: 1; }
+
+    /* ── Column label ── */
+    .col-label {
+      font-size: 9px;
       font-weight: 600;
-      letter-spacing: 0.3px;
-      line-height: 1.1;
-      text-align: center;
-      text-shadow: 0 2px 14px rgba(0, 0, 0, 0.55);
-    }
-
-    .subtitle {
-      font-size: 10px;
-      color: var(--text-muted);
+      letter-spacing: 1.2px;
       text-transform: uppercase;
-      letter-spacing: 0.8px;
+      color: var(--text-muted);
       text-align: center;
+      padding: 3px 0 1px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      margin-bottom: 2px;
     }
 
-    /* ── Card base ─────────────────────────────────────────────────────────── */
+    /* ── Card base ── */
     .card {
-      background: linear-gradient(180deg, rgba(13, 16, 23, 0.96), rgba(10, 12, 18, 0.96));
+      background: linear-gradient(180deg, rgba(13,16,23,0.96), rgba(10,12,18,0.96));
       border: 1px solid var(--glass-border);
       border-radius: 12px;
-      padding: 13px;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.30);
-      transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      padding: 11px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.30);
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      flex: 1; /* cards in same column stretch to equal height */
     }
 
     .card:hover {
       transform: translateY(-1px);
-      background: linear-gradient(180deg, rgba(18, 21, 30, 0.98), rgba(12, 15, 22, 0.98));
-      border-color: rgba(143, 211, 255, 0.26);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.34), 0 0 0 1px rgba(143, 211, 255, 0.10), 0 0 18px rgba(143, 211, 255, 0.08);
+      background: linear-gradient(180deg, rgba(18,21,30,0.98), rgba(12,15,22,0.98));
+      border-color: rgba(143,211,255,0.26);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.34), 0 0 0 1px rgba(143,211,255,0.10), 0 0 18px rgba(143,211,255,0.08);
     }
 
-    /* ── Saved state (green tint) ──────────────────────────────────────────── */
     .card.state-saved {
       border-color: var(--saved-border);
-      background: linear-gradient(180deg, rgba(13, 22, 18, 0.97), rgba(10, 16, 14, 0.97));
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.30), 0 0 0 1px rgba(127, 255, 178, 0.06), 0 0 20px rgba(127, 255, 178, 0.06);
+      background: linear-gradient(180deg, rgba(13,22,18,0.97), rgba(10,16,14,0.97));
+      box-shadow: 0 10px 24px rgba(0,0,0,0.30), 0 0 20px rgba(127,255,178,0.06);
     }
-
     .card.state-saved:hover {
-      border-color: rgba(127, 255, 178, 0.40);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.34), 0 0 0 1px rgba(127, 255, 178, 0.12), 0 0 22px rgba(127, 255, 178, 0.10);
+      border-color: rgba(127,255,178,0.40);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.34), 0 0 22px rgba(127,255,178,0.10);
     }
 
-    /* ── Pending state (amber tint) ─────────────────────────────────────────── */
     .card.state-pending {
       border-color: var(--pending-border);
-      background: linear-gradient(180deg, rgba(22, 19, 11, 0.97), rgba(16, 14, 9, 0.97));
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.30), 0 0 0 1px rgba(255, 217, 122, 0.06), 0 0 20px rgba(255, 217, 122, 0.06);
+      background: linear-gradient(180deg, rgba(22,19,11,0.97), rgba(16,14,9,0.97));
+      box-shadow: 0 10px 24px rgba(0,0,0,0.30), 0 0 20px rgba(255,217,122,0.06);
     }
-
     .card.state-pending:hover {
-      border-color: rgba(255, 217, 122, 0.40);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.34), 0 0 0 1px rgba(255, 217, 122, 0.12), 0 0 22px rgba(255, 217, 122, 0.10);
+      border-color: rgba(255,217,122,0.40);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.34), 0 0 22px rgba(255,217,122,0.10);
     }
 
-    /* ── Disabled state ────────────────────────────────────────────────────── */
-    .card[data-enabled="false"] {
-      opacity: 0.38;
-      filter: grayscale(100%);
-    }
+    .card[data-enabled="false"] { opacity: 0.38; filter: grayscale(100%); }
 
+    /* ── Card header ── */
     .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 11px;
-    }
-
-    .card-title-wrap {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-    }
-
-    .card-title {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      transition: color 0.2s;
-    }
-
-    .card.state-saved .card-title { color: var(--saved-accent); }
-    .card.state-pending .card-title { color: var(--pending-accent); }
-
-    /* State badge pill */
-    .state-badge {
-      font-size: 9px;
-      font-weight: 600;
-      letter-spacing: 0.7px;
-      text-transform: uppercase;
-      padding: 2px 7px;
-      border-radius: 999px;
-      opacity: 0;
-      transition: opacity 0.25s ease;
-      pointer-events: none;
-    }
-
-    .card.state-saved .state-badge {
-      background: var(--saved-accent-soft);
-      color: var(--saved-accent);
-      border: 1px solid rgba(127, 255, 178, 0.22);
-      opacity: 1;
-    }
-
-    .card.state-pending .state-badge {
-      background: var(--pending-accent-soft);
-      color: var(--pending-accent);
-      border: 1px solid rgba(255, 217, 122, 0.22);
-      opacity: 1;
-    }
-
-    /* ── Toggle ─────────────────────────────────────────────────────────────── */
-    .toggle {
-      position: relative;
-      display: inline-block;
-      width: 36px;
-      height: 20px;
-    }
-
-    .toggle input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    .toggle-slider {
-      position: absolute;
-      inset: 0;
-      cursor: pointer;
-      background: rgba(0, 0, 0, 0.46);
-      border-radius: 999px;
-      transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      border: 1px solid var(--glass-border);
-    }
-
-    .toggle:hover .toggle-slider {
-      border-color: rgba(143, 211, 255, 0.20);
-      box-shadow: 0 0 0 1px rgba(143, 211, 255, 0.06), 0 0 14px rgba(143, 211, 255, 0.08);
-    }
-
-    .toggle-slider::before {
-      content: "";
-      position: absolute;
-      height: 14px;
-      width: 14px;
-      left: 2px;
-      bottom: 2px;
-      background: #fff;
-      border-radius: 50%;
-      transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.38);
-    }
-
-    .toggle input:checked + .toggle-slider {
-      background: linear-gradient(180deg, rgba(143, 211, 255, 0.95), rgba(100, 170, 230, 0.95));
-      border-color: rgba(143, 211, 255, 0.75);
-      box-shadow: 0 0 14px rgba(143, 211, 255, 0.24);
-    }
-
-    .toggle input:checked + .toggle-slider::before {
-      transform: translateX(16px);
-    }
-
-    /* ── Card body ───────────────────────────────────────────────────────────── */
-    .card-body {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-
-    .file-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      display: flex; justify-content: space-between; align-items: center;
       margin-bottom: 10px;
     }
+    .card-title-wrap { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .card-title {
+      font-size: 10px; font-weight: 500; letter-spacing: 0.9px;
+      text-transform: uppercase; color: var(--text-muted); transition: color 0.2s;
+    }
+    .card.state-saved .card-title   { color: var(--saved-accent); }
+    .card.state-pending .card-title { color: var(--pending-accent); }
 
-    .file-btn {
-      font-size: 11px;
-      font-weight: 500;
-      padding: 6px 12px;
-      background: rgba(255, 255, 255, 0.09);
-      border: 1px solid var(--glass-border);
-      border-radius: 8px;
-      cursor: pointer;
-      white-space: nowrap;
-      color: var(--text-main);
-      transition: background 0.2s, border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+    .state-badge {
+      font-size: 8px; font-weight: 600; letter-spacing: 0.6px;
+      text-transform: uppercase; padding: 2px 6px; border-radius: 999px;
+      opacity: 0; transition: opacity 0.25s; pointer-events: none;
+    }
+    .card.state-saved .state-badge {
+      background: var(--saved-accent-soft); color: var(--saved-accent);
+      border: 1px solid rgba(127,255,178,0.22); opacity: 1;
+    }
+    .card.state-pending .state-badge {
+      background: var(--pending-accent-soft); color: var(--pending-accent);
+      border: 1px solid rgba(255,217,122,0.22); opacity: 1;
     }
 
+    /* ── Toggle ── */
+    .toggle { position: relative; display: inline-block; width: 32px; height: 18px; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute; inset: 0; cursor: pointer;
+      background: rgba(0,0,0,0.46); border-radius: 999px;
+      transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+      border: 1px solid var(--glass-border);
+    }
+    .toggle:hover .toggle-slider {
+      border-color: rgba(143,211,255,0.20);
+      box-shadow: 0 0 0 1px rgba(143,211,255,0.06), 0 0 14px rgba(143,211,255,0.08);
+    }
+    .toggle-slider::before {
+      content: ""; position: absolute;
+      height: 12px; width: 12px; left: 2px; bottom: 2px;
+      background: #fff; border-radius: 50%;
+      transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.38);
+    }
+    .toggle input:checked + .toggle-slider {
+      background: linear-gradient(180deg, rgba(143,211,255,0.95), rgba(100,170,230,0.95));
+      border-color: rgba(143,211,255,0.75);
+      box-shadow: 0 0 14px rgba(143,211,255,0.24);
+    }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(14px); }
+
+    /* ── Card body ── */
+    .card-body { display: flex; flex-direction: column; gap: 0; }
+
+    .file-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+
+    .file-btn {
+      font-size: 10px; font-weight: 500; padding: 5px 10px;
+      background: rgba(255,255,255,0.09); border: 1px solid var(--glass-border);
+      border-radius: 7px; cursor: pointer; white-space: nowrap; color: var(--text-main);
+      transition: background 0.2s, border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
     .file-btn:hover {
-      background: rgba(255, 255, 255, 0.14);
-      border-color: rgba(143, 211, 255, 0.22);
+      background: rgba(255,255,255,0.14); border-color: rgba(143,211,255,0.22);
       transform: translateY(-1px);
-      box-shadow: 0 0 0 1px rgba(143, 211, 255, 0.08), 0 0 16px rgba(143, 211, 255, 0.08);
+      box-shadow: 0 0 0 1px rgba(143,211,255,0.08), 0 0 16px rgba(143,211,255,0.08);
     }
 
     .file-name {
-      font-size: 11px;
-      color: var(--text-muted);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      flex: 1;
-      transition: color 0.2s;
+      font-size: 10px; color: var(--text-muted);
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      flex: 1; transition: color 0.2s;
     }
+    .file-name.pending { color: var(--pending-accent); }
+    .file-name.saved   { color: var(--saved-accent); }
 
-    /* Pending filename (file chosen, not yet saved) */
-    .file-name.pending {
-      color: var(--pending-accent);
-    }
+    .actions-row { display: flex; gap: 6px; margin-bottom: 8px; }
 
-    /* Saved filename */
-    .file-name.saved {
-      color: var(--saved-accent);
-    }
-
-    .actions-row {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-
-    /* ── Save button ─────────────────────────────────────────────────────────── */
     .save-btn {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 6px 16px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      color: #fff;
-      background: linear-gradient(180deg, rgba(143, 211, 255, 0.28), rgba(143, 211, 255, 0.16));
+      font-size: 10px; font-weight: 600; padding: 5px 13px;
+      border-radius: 7px; border: none; cursor: pointer; color: #fff;
+      background: linear-gradient(180deg, rgba(143,211,255,0.28), rgba(143,211,255,0.16));
       transition: transform 0.1s, filter 0.2s, background 0.25s, box-shadow 0.2s;
-      position: relative;
-      overflow: hidden;
     }
-
     .save-btn:active { transform: scale(0.96); }
-
     .save-btn:hover {
       filter: brightness(1.08);
-      background: linear-gradient(180deg, rgba(143, 211, 255, 0.34), rgba(143, 211, 255, 0.22));
-      box-shadow: 0 0 0 1px rgba(143, 211, 255, 0.10), 0 0 18px rgba(143, 211, 255, 0.12);
+      background: linear-gradient(180deg, rgba(143,211,255,0.34), rgba(143,211,255,0.22));
+      box-shadow: 0 0 0 1px rgba(143,211,255,0.10), 0 0 18px rgba(143,211,255,0.12);
     }
-
-    /* Saved state — green pulse */
     .save-btn.just-saved {
-      background: linear-gradient(180deg, rgba(127, 255, 178, 0.30), rgba(127, 255, 178, 0.16));
-      box-shadow: 0 0 0 1px rgba(127, 255, 178, 0.14), 0 0 18px rgba(127, 255, 178, 0.12);
+      background: linear-gradient(180deg, rgba(127,255,178,0.30), rgba(127,255,178,0.16));
+      box-shadow: 0 0 0 1px rgba(127,255,178,0.14), 0 0 18px rgba(127,255,178,0.12);
       color: var(--saved-accent);
     }
-
-    /* Pending state — amber */
     .card.state-pending .save-btn {
-      background: linear-gradient(180deg, rgba(255, 217, 122, 0.26), rgba(255, 217, 122, 0.14));
-      box-shadow: 0 0 0 1px rgba(255, 217, 122, 0.10);
+      background: linear-gradient(180deg, rgba(255,217,122,0.26), rgba(255,217,122,0.14));
     }
-
     .card.state-pending .save-btn:hover {
-      background: linear-gradient(180deg, rgba(255, 217, 122, 0.34), rgba(255, 217, 122, 0.22));
-      box-shadow: 0 0 0 1px rgba(255, 217, 122, 0.14), 0 0 18px rgba(255, 217, 122, 0.10);
+      background: linear-gradient(180deg, rgba(255,217,122,0.34), rgba(255,217,122,0.22));
+      box-shadow: 0 0 0 1px rgba(255,217,122,0.14), 0 0 18px rgba(255,217,122,0.10);
     }
 
     .clear-btn {
-      font-size: 11px;
-      padding: 6px 12px;
-      background: transparent;
-      border: 1px solid var(--glass-border);
-      border-radius: 8px;
-      color: var(--text-muted);
-      cursor: pointer;
+      font-size: 10px; padding: 5px 10px;
+      background: transparent; border: 1px solid var(--glass-border);
+      border-radius: 7px; color: var(--text-muted); cursor: pointer;
       transition: background 0.2s, color 0.2s, transform 0.15s, box-shadow 0.2s;
     }
-
     .clear-btn:hover {
-      background: rgba(255, 80, 80, 0.10);
-      border-color: rgba(255, 100, 100, 0.25);
-      color: #ff9090;
-      transform: translateY(-1px);
-      box-shadow: 0 0 0 1px rgba(255, 80, 80, 0.07), 0 0 12px rgba(255, 80, 80, 0.07);
+      background: rgba(255,80,80,0.10); border-color: rgba(255,100,100,0.25);
+      color: #ff9090; transform: translateY(-1px);
     }
 
-    /* ── Volume ──────────────────────────────────────────────────────────────── */
+    /* ── Volume ── */
     .volume-row {
       display: flex;
       align-items: center;
@@ -429,40 +313,20 @@
       text-align: right;
     }
 
-    /* ── Footer ──────────────────────────────────────────────────────────────── */
-    .footer {
-      text-align: center;
-      font-size: 10px;
-      color: var(--text-muted);
-      letter-spacing: 0.5px;
-      padding-top: 2px;
-    }
+    /* ── Footer ── */
+    .footer { text-align: center; font-size: 10px; color: var(--text-muted); letter-spacing: 0.5px; padding-top: 2px; }
+    .footer span { color: var(--text-main); font-weight: 600; }
 
-    .footer span {
-      color: var(--text-main);
-      font-weight: 600;
-    }
-
-    /* ── Toast status ────────────────────────────────────────────────────────── */
+    /* ── Toast ── */
     .status {
-      font-size: 11px;
-      text-align: center;
-      padding: 7px 8px;
-      border-radius: 10px;
-      display: none;
-      position: absolute;
-      left: 18px;
-      right: 18px;
-      bottom: 18px;
-      backdrop-filter: blur(10px);
-      background: rgba(0, 0, 0, 0.45);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      z-index: 10;
+      font-size: 11px; text-align: center; padding: 7px 8px; border-radius: 10px;
+      display: none; position: absolute; left: 18px; right: 18px; bottom: 18px;
+      backdrop-filter: blur(10px); background: rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.12); z-index: 10;
     }
-
     .status.visible { display: block; animation: slideUp 0.3s ease; }
-    .status.ok  { color: var(--saved-accent); border-color: rgba(127, 255, 178, 0.22); }
-    .status.err { color: #ff9090; border-color: rgba(255, 100, 100, 0.22); }
+    .status.ok  { color: var(--saved-accent);  border-color: rgba(127,255,178,0.22); }
+    .status.err { color: #ff9090; border-color: rgba(255,100,100,0.22); }
 
     @keyframes slideUp {
       from { opacity: 0; transform: translateY(10px); }
@@ -477,71 +341,139 @@
       <div class="subtitle">Transparent sound controls</div>
     </div>
 
-    <!-- Correct Submission card -->
-    <div class="card card-correct" data-card="correct" data-enabled="true">
-      <div class="card-header">
-        <div class="card-title-wrap">
-          <span class="card-title">Correct Submission</span>
-          <span class="state-badge" id="correctBadge"></span>
+    <div class="columns">
+
+      <!-- ── RUN column (left, narrower) ── -->
+      <div class="column column-run">
+        <div class="col-label">▶ Run Code</div>
+
+        <!-- Run · Correct -->
+        <div class="card" data-card="runCorrect" data-enabled="true">
+          <div class="card-header">
+            <div class="card-title-wrap">
+              <span class="card-title">Correct</span>
+              <span class="state-badge" id="runCorrectBadge"></span>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="runCorrectEnabled" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="card-body">
+            <div class="file-row">
+              <label class="file-btn" for="runCorrectFile">Choose</label>
+              <input type="file" id="runCorrectFile" accept="audio/*" hidden />
+              <span class="file-name" id="runCorrectFileName">No file</span>
+            </div>
+            <div class="actions-row">
+              <button class="save-btn" data-type="runCorrect">Save</button>
+              <button class="clear-btn" data-type="runCorrect" hidden>Clear</button>
+            </div>
+            <div class="volume-row">
+              <span class="volume-label">VOL</span>
+              <input type="range" min="0" max="100" value="100" class="volume-slider" id="runCorrectVolume" />
+              <span class="volume-value" id="runCorrectVolumeValue">100%</span>
+            </div>
+          </div>
         </div>
-        <label class="toggle">
-          <input type="checkbox" id="correctEnabled" checked />
-          <span class="toggle-slider"></span>
-        </label>
+
+        <!-- Run · Wrong -->
+        <div class="card" data-card="runWrong" data-enabled="true">
+          <div class="card-header">
+            <div class="card-title-wrap">
+              <span class="card-title">Wrong</span>
+              <span class="state-badge" id="runWrongBadge"></span>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="runWrongEnabled" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="card-body">
+            <div class="file-row">
+              <label class="file-btn" for="runWrongFile">Choose</label>
+              <input type="file" id="runWrongFile" accept="audio/*" hidden />
+              <span class="file-name" id="runWrongFileName">No file</span>
+            </div>
+            <div class="actions-row">
+              <button class="save-btn" data-type="runWrong">Save</button>
+              <button class="clear-btn" data-type="runWrong" hidden>Clear</button>
+            </div>
+            <div class="volume-row">
+              <span class="volume-label">VOL</span>
+              <input type="range" min="0" max="100" value="100" class="volume-slider" id="runWrongVolume" />
+              <span class="volume-value" id="runWrongVolumeValue">100%</span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="card-body">
-        <div class="file-row">
-          <label class="file-btn" for="correctFile">Choose File</label>
-          <input type="file" id="correctFile" accept="audio/*" hidden />
-          <span class="file-name" id="correctFileName">No file selected</span>
+      <!-- ── SUBMIT column (right, wider) ── -->
+      <div class="column column-submit">
+        <div class="col-label">🏁 Submit</div>
+
+        <!-- Submit · Accepted -->
+        <div class="card" data-card="correct" data-enabled="true">
+          <div class="card-header">
+            <div class="card-title-wrap">
+              <span class="card-title">Accepted</span>
+              <span class="state-badge" id="correctBadge"></span>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="correctEnabled" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="card-body">
+            <div class="file-row">
+              <label class="file-btn" for="correctFile">Choose File</label>
+              <input type="file" id="correctFile" accept="audio/*" hidden />
+              <span class="file-name" id="correctFileName">No file selected</span>
+            </div>
+            <div class="actions-row">
+              <button class="save-btn" data-type="correct">Save</button>
+              <button class="clear-btn" data-type="correct" hidden>Clear</button>
+            </div>
+            <div class="volume-row">
+              <span class="volume-label">VOL</span>
+              <input type="range" min="0" max="100" value="100" class="volume-slider" id="correctVolume" />
+              <span class="volume-value" id="correctVolumeValue">100%</span>
+            </div>
+          </div>
         </div>
 
-        <div class="actions-row">
-          <button class="save-btn" data-type="correct">Save</button>
-          <button class="clear-btn" data-type="correct" hidden>Clear</button>
-        </div>
-
-        <div class="volume-row">
-          <span class="volume-label">VOL</span>
-          <input type="range" min="0" max="100" value="100" class="volume-slider" id="correctVolume" />
-          <span class="volume-value" id="correctVolumeValue">100%</span>
+        <!-- Submit · Wrong -->
+        <div class="card" data-card="wrong" data-enabled="true">
+          <div class="card-header">
+            <div class="card-title-wrap">
+              <span class="card-title">Wrong Answer</span>
+              <span class="state-badge" id="wrongBadge"></span>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="wrongEnabled" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="card-body">
+            <div class="file-row">
+              <label class="file-btn" for="wrongFile">Choose File</label>
+              <input type="file" id="wrongFile" accept="audio/*" hidden />
+              <span class="file-name" id="wrongFileName">No file selected</span>
+            </div>
+            <div class="actions-row">
+              <button class="save-btn" data-type="wrong">Save</button>
+              <button class="clear-btn" data-type="wrong" hidden>Clear</button>
+            </div>
+            <div class="volume-row">
+              <span class="volume-label">VOL</span>
+              <input type="range" min="0" max="100" value="100" class="volume-slider" id="wrongVolume" />
+              <span class="volume-value" id="wrongVolumeValue">100%</span>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Wrong Submission card -->
-    <div class="card card-wrong" data-card="wrong" data-enabled="true">
-      <div class="card-header">
-        <div class="card-title-wrap">
-          <span class="card-title">Wrong Submission</span>
-          <span class="state-badge" id="wrongBadge"></span>
-        </div>
-        <label class="toggle">
-          <input type="checkbox" id="wrongEnabled" checked />
-          <span class="toggle-slider"></span>
-        </label>
-      </div>
-
-      <div class="card-body">
-        <div class="file-row">
-          <label class="file-btn" for="wrongFile">Choose File</label>
-          <input type="file" id="wrongFile" accept="audio/*" hidden />
-          <span class="file-name" id="wrongFileName">No file selected</span>
-        </div>
-
-        <div class="actions-row">
-          <button class="save-btn" data-type="wrong">Save</button>
-          <button class="clear-btn" data-type="wrong" hidden>Clear</button>
-        </div>
-
-        <div class="volume-row">
-          <span class="volume-label">VOL</span>
-          <input type="range" min="0" max="100" value="100" class="volume-slider" id="wrongVolume" />
-          <span class="volume-value" id="wrongVolumeValue">100%</span>
-        </div>
-      </div>
-    </div>
+    </div><!-- /columns -->
 
     <div class="footer">Made By <span>Ashutosh Kumar</span></div>
     <div class="status" id="status"></div>
