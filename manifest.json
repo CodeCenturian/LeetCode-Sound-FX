@@ -3,6 +3,11 @@
   "name": "LeetCode Sound FX",
   "version": "1.1.0",
   "description": "Custom sounds for LeetCode submissions",
+  "icons": {
+    "16": "16.png",
+    "48": "48.png",
+    "128": "128.png"
+  },
   "permissions": ["storage"],
   "host_permissions": ["https://leetcode.com/*"],
   "content_scripts": [
@@ -25,6 +30,11 @@
     }
   ],
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "16.png",
+      "48": "48.png",
+      "128": "128.png"
+    }
   }
 }
