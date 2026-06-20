@@ -96,9 +96,9 @@ async function playSound(type) {
   src.start(0);
 }
 
-// Listen for results dispatched by injected.js (MAIN world → ISOLATED world
-// window events are visible to content scripts in all Chromium browsers)
-window.addEventListener('lc-result', (e) => {
+// Listen for results dispatched by injected.js.
+// Document-level events are the most reliable bridge between page and content worlds.
+document.addEventListener('lc-result', (e) => {
   const { status } = e.detail;
   if (status === 'Accepted') playSound('correct');
   else playSound('wrong');

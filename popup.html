@@ -3,258 +3,487 @@
 <head>
   <meta charset="utf-8" />
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap');
+
     :root {
-      --glass-bg: rgba(255, 255, 255, 0.06);
+      --text-main: #ffffff;
+      --text-muted: #b9bcc7;
+      --shell-bg: rgba(7, 9, 14, 0.84);
+      --card-bg: rgba(12, 14, 20, 0.86);
+      --card-bg-hover: rgba(16, 19, 27, 0.92);
       --glass-border: rgba(255, 255, 255, 0.12);
-      --text: #e9e9f3;
-      --text-dim: #9595a8;
+      --glass-highlight: rgba(255, 255, 255, 0.12);
+      --accent: #8fd3ff;
+      --accent-strong: #d7f3ff;
+      --accent-soft: rgba(143, 211, 255, 0.16);
+      --accent-soft-strong: rgba(143, 211, 255, 0.24);
+      --track: rgba(255, 255, 255, 0.10);
+
+      /* State colours */
+      --saved-accent: #7fffb2;
+      --saved-accent-soft: rgba(127, 255, 178, 0.15);
+      --saved-border: rgba(127, 255, 178, 0.30);
+      --pending-accent: #ffd97a;
+      --pending-accent-soft: rgba(255, 217, 122, 0.13);
+      --pending-border: rgba(255, 217, 122, 0.30);
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      background: transparent;
+    }
 
     body {
-      width: 320px;
-      padding: 20px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #0b0c14;
-      color: var(--text);
-      position: relative;
+      width: 324px;
+      margin: 0;
+      padding: 0;
+      color: var(--text-main);
       overflow: hidden;
+      background: linear-gradient(180deg, rgba(7, 9, 14, 0.98), rgba(10, 12, 18, 0.96));
     }
 
-    /* Ambient glow blobs sit behind the glass cards */
-    .bg-blob {
+    .shell {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      min-height: 100vh;
+      padding: 14px;
+      background: linear-gradient(180deg, rgba(9, 11, 17, 0.96), rgba(10, 12, 18, 0.90));
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      backdrop-filter: blur(22px) saturate(120%);
+      -webkit-backdrop-filter: blur(22px) saturate(120%);
+    }
+
+    .shell::before {
+      content: "";
       position: absolute;
-      border-radius: 50%;
-      filter: blur(50px);
-      opacity: 0.32;
-      z-index: 0;
+      inset: 0;
       pointer-events: none;
+      background:
+        radial-gradient(circle at top left, rgba(143, 211, 255, 0.08), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(143, 211, 255, 0.05), transparent 30%);
+      opacity: 0.9;
     }
-    .blob1 { width: 170px; height: 170px; background: #6366f1; top: -55px; left: -45px; }
-    .blob2 { width: 190px; height: 190px; background: #06b6d4; bottom: -65px; right: -55px; }
 
-    .container { position: relative; z-index: 1; }
+    .header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 0 4px;
+    }
 
     h2 {
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 600;
-      margin-bottom: 16px;
-      letter-spacing: 0.01em;
+      letter-spacing: 0.3px;
+      line-height: 1.1;
+      text-align: center;
+      text-shadow: 0 2px 14px rgba(0, 0, 0, 0.55);
     }
 
+    .subtitle {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      text-align: center;
+    }
+
+    /* ── Card base ─────────────────────────────────────────────────────────── */
     .card {
-      background: var(--glass-bg);
+      background: linear-gradient(180deg, rgba(13, 16, 23, 0.96), rgba(10, 12, 18, 0.96));
       border: 1px solid var(--glass-border);
-      border-radius: 14px;
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      padding: 14px;
-      margin-bottom: 14px;
-      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      border-radius: 12px;
+      padding: 13px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.30);
+      transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
     }
 
-    .card-correct[data-enabled="true"] {
-      border-color: rgba(52, 211, 153, 0.45);
-      box-shadow: 0 4px 24px rgba(52, 211, 153, 0.16);
-    }
-    .card-wrong[data-enabled="true"] {
-      border-color: rgba(251, 113, 133, 0.45);
-      box-shadow: 0 4px 24px rgba(251, 113, 133, 0.16);
+    .card:hover {
+      transform: translateY(-1px);
+      background: linear-gradient(180deg, rgba(18, 21, 30, 0.98), rgba(12, 15, 22, 0.98));
+      border-color: rgba(143, 211, 255, 0.26);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.34), 0 0 0 1px rgba(143, 211, 255, 0.10), 0 0 18px rgba(143, 211, 255, 0.08);
     }
 
-    .card-body { transition: opacity 0.2s ease; }
-    .card[data-enabled="false"] .card-body { opacity: 0.5; }
+    /* ── Saved state (green tint) ──────────────────────────────────────────── */
+    .card.state-saved {
+      border-color: var(--saved-border);
+      background: linear-gradient(180deg, rgba(13, 22, 18, 0.97), rgba(10, 16, 14, 0.97));
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.30), 0 0 0 1px rgba(127, 255, 178, 0.06), 0 0 20px rgba(127, 255, 178, 0.06);
+    }
+
+    .card.state-saved:hover {
+      border-color: rgba(127, 255, 178, 0.40);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.34), 0 0 0 1px rgba(127, 255, 178, 0.12), 0 0 22px rgba(127, 255, 178, 0.10);
+    }
+
+    /* ── Pending state (amber tint) ─────────────────────────────────────────── */
+    .card.state-pending {
+      border-color: var(--pending-border);
+      background: linear-gradient(180deg, rgba(22, 19, 11, 0.97), rgba(16, 14, 9, 0.97));
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.30), 0 0 0 1px rgba(255, 217, 122, 0.06), 0 0 20px rgba(255, 217, 122, 0.06);
+    }
+
+    .card.state-pending:hover {
+      border-color: rgba(255, 217, 122, 0.40);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.34), 0 0 0 1px rgba(255, 217, 122, 0.12), 0 0 22px rgba(255, 217, 122, 0.10);
+    }
+
+    /* ── Disabled state ────────────────────────────────────────────────────── */
+    .card[data-enabled="false"] {
+      opacity: 0.38;
+      filter: grayscale(100%);
+    }
 
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 11px;
+    }
+
+    .card-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 7px;
     }
 
     .card-title {
-      font-size: 13px;
-      font-weight: 600;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      transition: color 0.2s;
     }
 
-    /* Toggle switch */
+    .card.state-saved .card-title { color: var(--saved-accent); }
+    .card.state-pending .card-title { color: var(--pending-accent); }
+
+    /* State badge pill */
+    .state-badge {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 999px;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      pointer-events: none;
+    }
+
+    .card.state-saved .state-badge {
+      background: var(--saved-accent-soft);
+      color: var(--saved-accent);
+      border: 1px solid rgba(127, 255, 178, 0.22);
+      opacity: 1;
+    }
+
+    .card.state-pending .state-badge {
+      background: var(--pending-accent-soft);
+      color: var(--pending-accent);
+      border: 1px solid rgba(255, 217, 122, 0.22);
+      opacity: 1;
+    }
+
+    /* ── Toggle ─────────────────────────────────────────────────────────────── */
     .toggle {
       position: relative;
       display: inline-block;
-      width: 38px;
-      height: 22px;
-      flex-shrink: 0;
+      width: 36px;
+      height: 20px;
     }
-    .toggle input { opacity: 0; width: 0; height: 0; }
+
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
     .toggle-slider {
       position: absolute;
+      inset: 0;
       cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(0, 0, 0, 0.46);
       border-radius: 999px;
-      transition: 0.2s;
+      transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid var(--glass-border);
     }
+
+    .toggle:hover .toggle-slider {
+      border-color: rgba(143, 211, 255, 0.20);
+      box-shadow: 0 0 0 1px rgba(143, 211, 255, 0.06), 0 0 14px rgba(143, 211, 255, 0.08);
+    }
+
     .toggle-slider::before {
       content: "";
       position: absolute;
-      height: 16px; width: 16px;
-      left: 3px; bottom: 3px;
+      height: 14px;
+      width: 14px;
+      left: 2px;
+      bottom: 2px;
       background: #fff;
       border-radius: 50%;
-      transition: 0.2s;
+      transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.38);
     }
-    .card-correct .toggle input:checked + .toggle-slider {
-      background: linear-gradient(135deg, #34d399, #22d3ee);
-      box-shadow: 0 0 10px rgba(52, 211, 153, 0.55);
+
+    .toggle input:checked + .toggle-slider {
+      background: linear-gradient(180deg, rgba(143, 211, 255, 0.95), rgba(100, 170, 230, 0.95));
+      border-color: rgba(143, 211, 255, 0.75);
+      box-shadow: 0 0 14px rgba(143, 211, 255, 0.24);
     }
-    .card-wrong .toggle input:checked + .toggle-slider {
-      background: linear-gradient(135deg, #fb7185, #f59e0b);
-      box-shadow: 0 0 10px rgba(251, 113, 133, 0.55);
-    }
+
     .toggle input:checked + .toggle-slider::before {
       transform: translateX(16px);
+    }
+
+    /* ── Card body ───────────────────────────────────────────────────────────── */
+    .card-body {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
     }
 
     .file-row {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       margin-bottom: 10px;
     }
 
     .file-btn {
       font-size: 11px;
-      padding: 5px 10px;
-      background: rgba(255, 255, 255, 0.08);
+      font-weight: 500;
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.09);
       border: 1px solid var(--glass-border);
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
       white-space: nowrap;
-      flex-shrink: 0;
-      transition: background 0.15s;
+      color: var(--text-main);
+      transition: background 0.2s, border-color 0.2s, transform 0.15s, box-shadow 0.2s;
     }
-    .file-btn:hover { background: rgba(255, 255, 255, 0.16); }
+
+    .file-btn:hover {
+      background: rgba(255, 255, 255, 0.14);
+      border-color: rgba(143, 211, 255, 0.22);
+      transform: translateY(-1px);
+      box-shadow: 0 0 0 1px rgba(143, 211, 255, 0.08), 0 0 16px rgba(143, 211, 255, 0.08);
+    }
 
     .file-name {
       font-size: 11px;
-      color: var(--text-dim);
+      color: var(--text-muted);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
       flex: 1;
+      transition: color 0.2s;
     }
-    .file-name.pending { color: #67e8f9; font-style: italic; }
+
+    /* Pending filename (file chosen, not yet saved) */
+    .file-name.pending {
+      color: var(--pending-accent);
+    }
+
+    /* Saved filename */
+    .file-name.saved {
+      color: var(--saved-accent);
+    }
 
     .actions-row {
       display: flex;
       gap: 8px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
-    .save-btn, .clear-btn {
+    /* ── Save button ─────────────────────────────────────────────────────────── */
+    .save-btn {
       font-size: 11px;
-      padding: 5px 12px;
-      border-radius: 6px;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 8px;
       border: none;
       cursor: pointer;
-      font-family: inherit;
+      color: #fff;
+      background: linear-gradient(180deg, rgba(143, 211, 255, 0.28), rgba(143, 211, 255, 0.16));
+      transition: transform 0.1s, filter 0.2s, background 0.25s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
     }
-    .card-correct .save-btn {
-      background: linear-gradient(135deg, #34d399, #22d3ee);
-      color: #06281c;
-      font-weight: 600;
-    }
-    .card-wrong .save-btn {
-      background: linear-gradient(135deg, #fb7185, #f59e0b);
-      color: #2b0a0a;
-      font-weight: 600;
-    }
-    .save-btn:hover { filter: brightness(1.08); }
-    .clear-btn {
-      background: rgba(255, 255, 255, 0.07);
-      color: var(--text-dim);
-      border: 1px solid var(--glass-border);
-    }
-    .clear-btn:hover { background: rgba(248, 113, 113, 0.15); color: #fca5a5; }
 
+    .save-btn:active { transform: scale(0.96); }
+
+    .save-btn:hover {
+      filter: brightness(1.08);
+      background: linear-gradient(180deg, rgba(143, 211, 255, 0.34), rgba(143, 211, 255, 0.22));
+      box-shadow: 0 0 0 1px rgba(143, 211, 255, 0.10), 0 0 18px rgba(143, 211, 255, 0.12);
+    }
+
+    /* Saved state — green pulse */
+    .save-btn.just-saved {
+      background: linear-gradient(180deg, rgba(127, 255, 178, 0.30), rgba(127, 255, 178, 0.16));
+      box-shadow: 0 0 0 1px rgba(127, 255, 178, 0.14), 0 0 18px rgba(127, 255, 178, 0.12);
+      color: var(--saved-accent);
+    }
+
+    /* Pending state — amber */
+    .card.state-pending .save-btn {
+      background: linear-gradient(180deg, rgba(255, 217, 122, 0.26), rgba(255, 217, 122, 0.14));
+      box-shadow: 0 0 0 1px rgba(255, 217, 122, 0.10);
+    }
+
+    .card.state-pending .save-btn:hover {
+      background: linear-gradient(180deg, rgba(255, 217, 122, 0.34), rgba(255, 217, 122, 0.22));
+      box-shadow: 0 0 0 1px rgba(255, 217, 122, 0.14), 0 0 18px rgba(255, 217, 122, 0.10);
+    }
+
+    .clear-btn {
+      font-size: 11px;
+      padding: 6px 12px;
+      background: transparent;
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+
+    .clear-btn:hover {
+      background: rgba(255, 80, 80, 0.10);
+      border-color: rgba(255, 100, 100, 0.25);
+      color: #ff9090;
+      transform: translateY(-1px);
+      box-shadow: 0 0 0 1px rgba(255, 80, 80, 0.07), 0 0 12px rgba(255, 80, 80, 0.07);
+    }
+
+    /* ── Volume ──────────────────────────────────────────────────────────────── */
     .volume-row {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
+
     .volume-label {
       font-size: 10px;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      width: 42px;
-      flex-shrink: 0;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      font-weight: 500;
     }
+
     .volume-slider {
       flex: 1;
       -webkit-appearance: none;
       appearance: none;
-      height: 4px;
-      border-radius: 2px;
-      background: rgba(255, 255, 255, 0.15);
+      height: 5px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent) 0%, var(--accent) 100%);
       outline: none;
     }
+
+    .volume-slider:hover {
+      box-shadow: 0 0 0 1px rgba(143, 211, 255, 0.10), 0 0 14px rgba(143, 211, 255, 0.10);
+    }
+
     .volume-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 13px; height: 13px;
+      width: 15px;
+      height: 15px;
       border-radius: 50%;
+      background: var(--accent-strong);
       cursor: pointer;
+      box-shadow: 0 0 0 3px rgba(143, 211, 255, 0.12), 0 3px 10px rgba(0, 0, 0, 0.45);
     }
-    .card-correct .volume-slider::-webkit-slider-thumb {
-      background: linear-gradient(135deg, #34d399, #22d3ee);
-      box-shadow: 0 0 6px rgba(52, 211, 153, 0.65);
+
+    .volume-slider:focus-visible::-webkit-slider-thumb {
+      box-shadow: 0 0 0 4px rgba(143, 211, 255, 0.18), 0 0 18px rgba(143, 211, 255, 0.16);
     }
-    .card-wrong .volume-slider::-webkit-slider-thumb {
-      background: linear-gradient(135deg, #fb7185, #f59e0b);
-      box-shadow: 0 0 6px rgba(251, 113, 133, 0.65);
-    }
+
     .volume-slider::-moz-range-thumb {
-      width: 13px; height: 13px;
-      border-radius: 50%;
+      width: 15px;
+      height: 15px;
       border: none;
-      cursor: pointer;
+      border-radius: 50%;
+      background: var(--accent-strong);
+      box-shadow: 0 0 0 3px rgba(143, 211, 255, 0.12), 0 3px 10px rgba(0, 0, 0, 0.45);
     }
-    .card-correct .volume-slider::-moz-range-thumb { background: #34d399; }
-    .card-wrong .volume-slider::-moz-range-thumb { background: #fb7185; }
 
     .volume-value {
-      font-size: 10px;
-      color: var(--text-dim);
+      font-size: 11px;
+      font-weight: 500;
       width: 32px;
       text-align: right;
-      flex-shrink: 0;
     }
 
+    /* ── Footer ──────────────────────────────────────────────────────────────── */
+    .footer {
+      text-align: center;
+      font-size: 10px;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      padding-top: 2px;
+    }
+
+    .footer span {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    /* ── Toast status ────────────────────────────────────────────────────────── */
     .status {
       font-size: 11px;
       text-align: center;
-      min-height: 14px;
-      padding: 6px;
-      border-radius: 8px;
-      margin-top: 2px;
+      padding: 7px 8px;
+      border-radius: 10px;
       display: none;
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 18px;
+      backdrop-filter: blur(10px);
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      z-index: 10;
     }
-    .status.visible { display: block; }
-    .status.ok { background: rgba(34, 197, 94, 0.12); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.25); }
-    .status.err { background: rgba(239, 68, 68, 0.12); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.25); }
+
+    .status.visible { display: block; animation: slideUp 0.3s ease; }
+    .status.ok  { color: var(--saved-accent); border-color: rgba(127, 255, 178, 0.22); }
+    .status.err { color: #ff9090; border-color: rgba(255, 100, 100, 0.22); }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
-  <div class="bg-blob blob1"></div>
-  <div class="bg-blob blob2"></div>
+  <div class="shell">
+    <div class="header">
+      <h2>LeetCode Sound FX</h2>
+      <div class="subtitle">Transparent sound controls</div>
+    </div>
 
-  <div class="container">
-    <h2>LeetCode Sound FX</h2>
-
+    <!-- Correct Submission card -->
     <div class="card card-correct" data-card="correct" data-enabled="true">
       <div class="card-header">
-        <span class="card-title">Correct Submission</span>
+        <div class="card-title-wrap">
+          <span class="card-title">Correct Submission</span>
+          <span class="state-badge" id="correctBadge"></span>
+        </div>
         <label class="toggle">
           <input type="checkbox" id="correctEnabled" checked />
           <span class="toggle-slider"></span>
@@ -274,16 +503,20 @@
         </div>
 
         <div class="volume-row">
-          <span class="volume-label">Volume</span>
+          <span class="volume-label">VOL</span>
           <input type="range" min="0" max="100" value="100" class="volume-slider" id="correctVolume" />
           <span class="volume-value" id="correctVolumeValue">100%</span>
         </div>
       </div>
     </div>
 
+    <!-- Wrong Submission card -->
     <div class="card card-wrong" data-card="wrong" data-enabled="true">
       <div class="card-header">
-        <span class="card-title">Wrong Submission</span>
+        <div class="card-title-wrap">
+          <span class="card-title">Wrong Submission</span>
+          <span class="state-badge" id="wrongBadge"></span>
+        </div>
         <label class="toggle">
           <input type="checkbox" id="wrongEnabled" checked />
           <span class="toggle-slider"></span>
@@ -303,13 +536,14 @@
         </div>
 
         <div class="volume-row">
-          <span class="volume-label">Volume</span>
+          <span class="volume-label">VOL</span>
           <input type="range" min="0" max="100" value="100" class="volume-slider" id="wrongVolume" />
           <span class="volume-value" id="wrongVolumeValue">100%</span>
         </div>
       </div>
     </div>
 
+    <div class="footer">Made By <span>Ashutosh Kumar</span></div>
     <div class="status" id="status"></div>
   </div>
 
