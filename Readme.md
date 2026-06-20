@@ -40,7 +40,7 @@ The extension listens for results on LeetCode and plays a sound of your choice �
 
 Or grab whatever is current from the **[releases page](https://github.com/CodeCenturian/LeetCode-Sound-FX/releases/latest)** — click the `.zip` file under **Assets** (not "Source code"). Then extract / unzip it somewhere you'll remember — your Desktop works fine.
 
-<img width="654" height="252" alt="image" src="https://github.com/user-attachments/assets/dea4f7b2-98ad-40ca-bf5b-1bf05e3ec088" />
+<img width="601" height="227" alt="image" src="https://github.com/user-attachments/assets/32ab7684-50e3-4df1-80b7-e181e6cf8e09" />
 
 > **Note:** Please use the releases link above rather than the green "Code → Download ZIP" button on the repo. The releases zip tracks download counts so I can see how many people are using this.
 
