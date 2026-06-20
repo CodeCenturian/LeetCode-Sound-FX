@@ -4,9 +4,9 @@
   "version": "1.1.0",
   "description": "Custom sounds for LeetCode submissions",
   "icons": {
-    "16": "16.png",
-    "48": "48.png",
-    "128": "128.png"
+    "16": "icons/16.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
   },
   "permissions": ["storage"],
   "host_permissions": ["https://leetcode.com/*"],
@@ -32,9 +32,9 @@
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "16.png",
-      "48": "48.png",
-      "128": "128.png"
+      "16": "icons/16.png",
+      "48": "icons/48.png",
+      "128": "icons/128.png"
     }
   }
 }
