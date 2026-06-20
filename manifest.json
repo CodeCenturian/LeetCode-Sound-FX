@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "LeetCode Sound FX",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Custom sounds for LeetCode submissions",
   "icons": {
     "16": "icons/16.png",
