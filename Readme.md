@@ -32,6 +32,8 @@ The extension listens for submission results on LeetCode and plays a sound of yo
 
 On the releases page, click the `.zip` file under **Assets** (not "Source code") to download it. Then extract / unzip it somewhere you'll remember — your Desktop works fine.
 
+<img width="654" height="252" alt="image" src="https://github.com/user-attachments/assets/dea4f7b2-98ad-40ca-bf5b-1bf05e3ec088" />
+
 > **Note:** Please use the releases link above rather than the green "Code → Download ZIP" button on the repo. The releases zip tracks download counts so I can see how many people are using this.
 
 ### Step 2 — Open your browser's Extensions page
@@ -48,16 +50,27 @@ Paste the URL for your browser directly into the address bar:
 ### Step 3 — Enable Developer Mode
 
 In the top-right corner of the Extensions page, toggle **Developer mode** ON.
+<img width="693" height="355" alt="image" src="https://github.com/user-attachments/assets/4ea80b19-187f-4e13-bf76-3148e19f9ab2" />
+
 
 ### Step 4 — Load the extension
 
 Click **Load unpacked** (top-left) → navigate to and select the folder you extracted in Step 1. Select the folder itself (the one that contains `manifest.json`), not any file inside it.
 
+<img width="667" height="290" alt="image" src="https://github.com/user-attachments/assets/79323df6-4894-4652-ba58-8f328fe356af" />
+
 You should see the **LeetCode Sound FX** card appear in your extensions list.
 
-### Step 5 — Pin it (optional but recommended)
+### Step 5 — Pin it 
 
 Click the puzzle piece / extensions icon 🧩 in your browser's toolbar → find **LeetCode Sound FX** → click the pin icon so it stays visible.
+<img width="687" height="517" alt="image" src="https://github.com/user-attachments/assets/ebead24d-d0e2-40a6-8140-b853ecf1d0cc" />
+
+### Step 6 — Set the Sound Effects
+
+You can searach for any meme sound or anything of your choice and set it there and click save. Now click Ctrl+Shift+R to reload.
+
+You are now ready to test this thing out.
 
 ---
 
