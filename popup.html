@@ -3,92 +3,316 @@
 <head>
   <meta charset="utf-8" />
   <style>
+    :root {
+      --glass-bg: rgba(255, 255, 255, 0.06);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --text: #e9e9f3;
+      --text-dim: #9595a8;
+    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
+      width: 320px;
+      padding: 20px;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      width: 280px;
-      padding: 16px;
-      background: #1a1a1a;
-      color: #e0e0e0;
+      background: #0b0c14;
+      color: var(--text);
+      position: relative;
+      overflow: hidden;
     }
+
+    /* Ambient glow blobs sit behind the glass cards */
+    .bg-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(50px);
+      opacity: 0.32;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .blob1 { width: 170px; height: 170px; background: #6366f1; top: -55px; left: -45px; }
+    .blob2 { width: 190px; height: 190px; background: #06b6d4; bottom: -65px; right: -55px; }
+
+    .container { position: relative; z-index: 1; }
+
     h2 {
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 600;
-      margin-bottom: 14px;
-      color: #ffffff;
-      border-bottom: 1px solid #333;
-      padding-bottom: 10px;
+      margin-bottom: 16px;
+      letter-spacing: 0.01em;
     }
-    .field { margin-top: 14px; }
-    label {
-      display: block;
-      font-size: 12px;
+
+    .card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      padding: 14px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card-correct[data-enabled="true"] {
+      border-color: rgba(52, 211, 153, 0.45);
+      box-shadow: 0 4px 24px rgba(52, 211, 153, 0.16);
+    }
+    .card-wrong[data-enabled="true"] {
+      border-color: rgba(251, 113, 133, 0.45);
+      box-shadow: 0 4px 24px rgba(251, 113, 133, 0.16);
+    }
+
+    .card-body { transition: opacity 0.2s ease; }
+    .card[data-enabled="false"] .card-body { opacity: 0.5; }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-size: 13px;
       font-weight: 600;
+    }
+
+    /* Toggle switch */
+    .toggle {
+      position: relative;
+      display: inline-block;
+      width: 38px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 999px;
+      transition: 0.2s;
+    }
+    .toggle-slider::before {
+      content: "";
+      position: absolute;
+      height: 16px; width: 16px;
+      left: 3px; bottom: 3px;
+      background: #fff;
+      border-radius: 50%;
+      transition: 0.2s;
+    }
+    .card-correct .toggle input:checked + .toggle-slider {
+      background: linear-gradient(135deg, #34d399, #22d3ee);
+      box-shadow: 0 0 10px rgba(52, 211, 153, 0.55);
+    }
+    .card-wrong .toggle input:checked + .toggle-slider {
+      background: linear-gradient(135deg, #fb7185, #f59e0b);
+      box-shadow: 0 0 10px rgba(251, 113, 133, 0.55);
+    }
+    .toggle input:checked + .toggle-slider::before {
+      transform: translateX(16px);
+    }
+
+    .file-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .file-btn {
+      font-size: 11px;
+      padding: 5px 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--glass-border);
+      border-radius: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: background 0.15s;
+    }
+    .file-btn:hover { background: rgba(255, 255, 255, 0.16); }
+
+    .file-name {
+      font-size: 11px;
+      color: var(--text-dim);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+    }
+    .file-name.pending { color: #67e8f9; font-style: italic; }
+
+    .actions-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .save-btn, .clear-btn {
+      font-size: 11px;
+      padding: 5px 12px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .card-correct .save-btn {
+      background: linear-gradient(135deg, #34d399, #22d3ee);
+      color: #06281c;
+      font-weight: 600;
+    }
+    .card-wrong .save-btn {
+      background: linear-gradient(135deg, #fb7185, #f59e0b);
+      color: #2b0a0a;
+      font-weight: 600;
+    }
+    .save-btn:hover { filter: brightness(1.08); }
+    .clear-btn {
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--text-dim);
+      border: 1px solid var(--glass-border);
+    }
+    .clear-btn:hover { background: rgba(248, 113, 113, 0.15); color: #fca5a5; }
+
+    .volume-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .volume-label {
+      font-size: 10px;
+      color: var(--text-dim);
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      color: #aaa;
-      margin-bottom: 6px;
+      width: 42px;
+      flex-shrink: 0;
     }
-    input[type="file"] {
-      display: block;
-      width: 100%;
-      font-size: 12px;
-      color: #ccc;
-      background: #2a2a2a;
-      border: 1px solid #444;
-      border-radius: 4px;
-      padding: 5px;
+    .volume-slider {
+      flex: 1;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.15);
+      outline: none;
+    }
+    .volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 13px; height: 13px;
+      border-radius: 50%;
       cursor: pointer;
     }
-    input[type="file"]::file-selector-button {
-      background: #333;
-      color: #ccc;
+    .card-correct .volume-slider::-webkit-slider-thumb {
+      background: linear-gradient(135deg, #34d399, #22d3ee);
+      box-shadow: 0 0 6px rgba(52, 211, 153, 0.65);
+    }
+    .card-wrong .volume-slider::-webkit-slider-thumb {
+      background: linear-gradient(135deg, #fb7185, #f59e0b);
+      box-shadow: 0 0 6px rgba(251, 113, 133, 0.65);
+    }
+    .volume-slider::-moz-range-thumb {
+      width: 13px; height: 13px;
+      border-radius: 50%;
       border: none;
-      padding: 3px 8px;
-      border-radius: 3px;
-      cursor: pointer;
-      font-size: 12px;
-    }
-    button {
-      margin-top: 6px;
-      padding: 5px 12px;
-      background: #2d6a4f;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      font-size: 12px;
       cursor: pointer;
     }
-    button:hover { background: #3a8a65; }
+    .card-correct .volume-slider::-moz-range-thumb { background: #34d399; }
+    .card-wrong .volume-slider::-moz-range-thumb { background: #fb7185; }
+
+    .volume-value {
+      font-size: 10px;
+      color: var(--text-dim);
+      width: 32px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
     .status {
-      margin-top: 12px;
-      font-size: 12px;
-      min-height: 16px;
-      border-radius: 4px;
-      padding: 4px 8px;
+      font-size: 11px;
+      text-align: center;
+      min-height: 14px;
+      padding: 6px;
+      border-radius: 8px;
+      margin-top: 2px;
       display: none;
     }
     .status.visible { display: block; }
-    .status.ok  { background: #1b4332; color: #6fcf97; }
-    .status.err { background: #4a1c1c; color: #eb5757; }
+    .status.ok { background: rgba(34, 197, 94, 0.12); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.25); }
+    .status.err { background: rgba(239, 68, 68, 0.12); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.25); }
   </style>
 </head>
 <body>
-  <h2>LeetCode Sound FX</h2>
+  <div class="bg-blob blob1"></div>
+  <div class="bg-blob blob2"></div>
 
-  <div class="field">
-    <label>Correct Submission Sound</label>
-    <input type="file" id="correctFile" accept="audio/*" />
-    <button data-type="correct">Save</button>
+  <div class="container">
+    <h2>LeetCode Sound FX</h2>
+
+    <div class="card card-correct" data-card="correct" data-enabled="true">
+      <div class="card-header">
+        <span class="card-title">Correct Submission</span>
+        <label class="toggle">
+          <input type="checkbox" id="correctEnabled" checked />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="card-body">
+        <div class="file-row">
+          <label class="file-btn" for="correctFile">Choose File</label>
+          <input type="file" id="correctFile" accept="audio/*" hidden />
+          <span class="file-name" id="correctFileName">No file selected</span>
+        </div>
+
+        <div class="actions-row">
+          <button class="save-btn" data-type="correct">Save</button>
+          <button class="clear-btn" data-type="correct" hidden>Clear</button>
+        </div>
+
+        <div class="volume-row">
+          <span class="volume-label">Volume</span>
+          <input type="range" min="0" max="100" value="100" class="volume-slider" id="correctVolume" />
+          <span class="volume-value" id="correctVolumeValue">100%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-wrong" data-card="wrong" data-enabled="true">
+      <div class="card-header">
+        <span class="card-title">Wrong Submission</span>
+        <label class="toggle">
+          <input type="checkbox" id="wrongEnabled" checked />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="card-body">
+        <div class="file-row">
+          <label class="file-btn" for="wrongFile">Choose File</label>
+          <input type="file" id="wrongFile" accept="audio/*" hidden />
+          <span class="file-name" id="wrongFileName">No file selected</span>
+        </div>
+
+        <div class="actions-row">
+          <button class="save-btn" data-type="wrong">Save</button>
+          <button class="clear-btn" data-type="wrong" hidden>Clear</button>
+        </div>
+
+        <div class="volume-row">
+          <span class="volume-label">Volume</span>
+          <input type="range" min="0" max="100" value="100" class="volume-slider" id="wrongVolume" />
+          <span class="volume-value" id="wrongVolumeValue">100%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="status" id="status"></div>
   </div>
 
-  <div class="field">
-    <label>Wrong Submission Sound</label>
-    <input type="file" id="wrongFile" accept="audio/*" />
-    <button data-type="wrong">Save</button>
-  </div>
-
-  <div class="status" id="status"></div>
   <script src="popup.js"></script>
 </body>
 </html>
