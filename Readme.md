@@ -147,6 +147,13 @@ The idea here is small but deliberate: **attach a moment of joy or comedy to the
 If this extension makes even one person sit through one more problem they would have quit on — that's the whole goal.
 
 ---
+## 🐞 Bug Finders
+
+Special thanks to community members who spotted and reported issues:
+- @Priyanshukyadav 
+
+
+---
 
 ## License
 
