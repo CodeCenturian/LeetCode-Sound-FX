@@ -150,8 +150,8 @@ If this extension makes even one person sit through one more problem they would 
 ## 🐞 Bug Finders
 
 Special thanks to community members who spotted and reported issues:
-- @Priyanshukyadav 
 
+- [Priyanshu Kumar Yadav](https://github.com/Priyanshukyadav)
 
 ---
 
